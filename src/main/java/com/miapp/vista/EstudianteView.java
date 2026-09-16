@@ -17,6 +17,11 @@ import java.util.List;
  * Controlador le entrega ya preparados. Así la Vista queda desacoplada
  * del Modelo y toda la comunicación pasa por el Controlador.
  */
+
+/**prueba de funcionamiento
+ * 
+ * @author Estudiante
+ */
 public class EstudianteView extends JFrame {
 
     // ── Componentes UI ────────────────────────────────────────────────────────
@@ -25,6 +30,7 @@ public class EstudianteView extends JFrame {
     private JTable                 tblResultados;
     private DefaultTableModel      modeloTabla;
     private JLabel                 lblEstado;
+    private JButton                btnAgregar;
 
     // ── Controlador ───────────────────────────────────────────────────────────
     private EstudianteController controlador;
