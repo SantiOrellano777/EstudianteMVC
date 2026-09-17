@@ -30,7 +30,10 @@ public class EstudianteView extends JFrame {
     private JTable                 tblResultados;
     private DefaultTableModel      modeloTabla;
     private JLabel                 lblEstado;
-    private JButton                btnAgregar;
+    private JButton             btnAgregar;
+    private JTextField txtNombreNuevo;
+    private JTextField txtCarreraNueva;
+    private JTextField txtPromedioNuevo;
 
     // ── Controlador ───────────────────────────────────────────────────────────
     private EstudianteController controlador;
@@ -65,6 +68,26 @@ public class EstudianteView extends JFrame {
         panelBusqueda.add(lblNombre);
         panelBusqueda.add(txtNombre);
         panelBusqueda.add(btnBuscar);
+        
+        JPanel panelFormulario = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        panelFormulario.setBorder(BorderFactory.createTitledBorder("Registrar nuevo estudiante"));
+
+        txtNombreNuevo   = new JTextField(15);
+        txtCarreraNueva  = new JTextField(15);
+        txtPromedioNuevo = new JTextField(5);
+        
+        btnAgregar = new JButton("Agregar");
+        btnAgregar.setBackground(new Color(46, 160, 67));
+        btnAgregar.setForeground(Color.WHITE);
+        btnAgregar.setFocusPainted(false);
+
+        panelFormulario.add(new JLabel("Nombre:"));
+        panelFormulario.add(txtNombreNuevo);
+        panelFormulario.add(new JLabel("Carrera:"));
+        panelFormulario.add(txtCarreraNueva);
+        panelFormulario.add(new JLabel("Promedio:"));
+        panelFormulario.add(txtPromedioNuevo);
+        panelFormulario.add(btnAgregar);
 
         // Panel central — tabla de resultados
         String[] columnas = {"ID", "Nombre", "Carrera", "Promedio"};
@@ -85,9 +108,16 @@ public class EstudianteView extends JFrame {
         lblEstado.setBorder(BorderFactory.createEmptyBorder(4, 10, 4, 10));
         lblEstado.setForeground(Color.GRAY);
 
-        add(panelBusqueda, BorderLayout.NORTH);
+        JPanel panelSuperior = new JPanel();
+        panelSuperior.setLayout(new BoxLayout(panelSuperior, BoxLayout.Y_AXIS));
+        panelSuperior.add(panelBusqueda);
+        panelSuperior.add(panelFormulario);
+        add(panelSuperior, BorderLayout.NORTH);
         add(scroll,        BorderLayout.CENTER);
         add(lblEstado,     BorderLayout.SOUTH);
+        
+        
+        
     }
 
     // ── Eventos ───────────────────────────────────────────────────────────────
@@ -101,6 +131,27 @@ public class EstudianteView extends JFrame {
 
         // También buscar al presionar Enter en el campo de texto
         txtNombre.addActionListener((ActionEvent e) -> btnBuscar.doClick());
+        
+        
+        btnAgregar.addActionListener((ActionEvent e) -> {
+            if (controlador == null) {
+                return;
+            }
+
+            String nombre  = txtNombreNuevo.getText().trim();
+            String carrera = txtCarreraNueva.getText().trim();
+            String textoPromedio = txtPromedioNuevo.getText().trim();
+
+            double promedio;
+               try {
+                promedio = Double.parseDouble(textoPromedio);
+            } catch (NumberFormatException ex) {
+             mostrarError("El promedio debe ser un número (ej: 4.5).");
+                return;
+                    }
+
+            controlador.agregarEstudiante(nombre, carrera, promedio);
+        });
     }
 
     // ── Métodos públicos que llama el Controlador ─────────────────────────────
@@ -141,6 +192,14 @@ public class EstudianteView extends JFrame {
         JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
         setEstado("Error: " + mensaje);
     }
+    
+    public void mostrarConfirmacion(String mensaje) {
+    JOptionPane.showMessageDialog(this, mensaje, "Registro exitoso", JOptionPane.INFORMATION_MESSAGE);
+    txtNombreNuevo.setText("");
+    txtCarreraNueva.setText("");
+    txtPromedioNuevo.setText("");
+    setEstado(mensaje);
+    }       
 
     /**
      * Devuelve el texto ingresado en el campo de nombre.

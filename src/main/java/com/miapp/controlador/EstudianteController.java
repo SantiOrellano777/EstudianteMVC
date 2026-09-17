@@ -105,6 +105,9 @@ public class EstudianteController {
         Estudiante nuevo = new Estudiante(nuevoId, nombre.trim(), carrera.trim(), promedio);
         estudiantes.add(nuevo);
         
+        vista.mostrarConfirmacion("Estudiante \"" + nuevo.getNombre() + "\" registrado correctamente.");
+        vista.mostrarEstudiantes(convertirAFilas(estudiantes));
+        
     }
 
     private int generarSiguienteId() {
