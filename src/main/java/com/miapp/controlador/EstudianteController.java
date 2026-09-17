@@ -100,8 +100,22 @@ public class EstudianteController {
         if (promedio < 0.0 || promedio > 5.0) {
         vista.mostrarError("El promedio debe estar entre 0.0 y 5.0.");
         return;}
+       
+        int nuevoId = generarSiguienteId();
+        Estudiante nuevo = new Estudiante(nuevoId, nombre.trim(), carrera.trim(), promedio);
+        estudiantes.add(nuevo);
+        
     }
 
+    private int generarSiguienteId() {
+    int maxId = 0;
+    for (Estudiante e : estudiantes) {
+        if (e.getId() > maxId) {
+            maxId = e.getId();
+        }
+    }
+    return maxId + 1;
+    }
     // ── Traducción Modelo → datos para la Vista ───────────────────────────────
     // Estos métodos son el "puente" que evita que la Vista dependa de Estudiante.
 
