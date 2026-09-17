@@ -91,6 +91,16 @@ public class EstudianteController {
             vista.mostrarEstudiantes(convertirAFilas(resultados));
         }
     }
+    
+    public void agregarEstudiante(String nombre, String carrera, double promedio) {
+        if (nombre == null || nombre.trim().isEmpty()) {
+        vista.mostrarError("El nombre no puede estar vacío.");
+        return;}
+        
+        if (promedio < 0.0 || promedio > 5.0) {
+        vista.mostrarError("El promedio debe estar entre 0.0 y 5.0.");
+        return;}
+    }
 
     // ── Traducción Modelo → datos para la Vista ───────────────────────────────
     // Estos métodos son el "puente" que evita que la Vista dependa de Estudiante.
