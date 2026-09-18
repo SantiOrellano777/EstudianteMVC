@@ -34,6 +34,9 @@ public class EstudianteView extends JFrame {
     private JTextField txtNombreNuevo;
     private JTextField txtCarreraNueva;
     private JTextField txtPromedioNuevo;
+    private JButton                btnMostrarTodos;
+    private JComboBox<String>      cbCriterioOrden;
+    private JButton                btnOrdenar;
 
     // ── Controlador ───────────────────────────────────────────────────────────
     private EstudianteController controlador;
@@ -64,10 +67,14 @@ public class EstudianteView extends JFrame {
         btnBuscar.setBackground(new Color(59, 139, 212));
         btnBuscar.setForeground(Color.WHITE);
         btnBuscar.setFocusPainted(false);
+        
+        btnMostrarTodos = new JButton("Mostrar todos");     
+        btnMostrarTodos.setFocusPainted(false);   
 
         panelBusqueda.add(lblNombre);
         panelBusqueda.add(txtNombre);
         panelBusqueda.add(btnBuscar);
+        panelBusqueda.add(btnMostrarTodos);
         
         JPanel panelFormulario = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
         panelFormulario.setBorder(BorderFactory.createTitledBorder("Registrar nuevo estudiante"));
@@ -88,6 +95,18 @@ public class EstudianteView extends JFrame {
         panelFormulario.add(new JLabel("Promedio:"));
         panelFormulario.add(txtPromedioNuevo);
         panelFormulario.add(btnAgregar);
+        
+        JPanel panelOrden = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        panelOrden.setBorder(BorderFactory.createTitledBorder("Ordenar resultados"));
+
+        JLabel lblCriterio = new JLabel("Criterio:");
+        cbCriterioOrden = new JComboBox<>(new String[] {"Nombre", "Promedio"});
+        btnOrdenar = new JButton("Ordenar");
+        btnOrdenar.setFocusPainted(false);
+
+        panelOrden.add(lblCriterio);
+        panelOrden.add(cbCriterioOrden);
+        panelOrden.add(btnOrdenar);
 
         // Panel central — tabla de resultados
         String[] columnas = {"ID", "Nombre", "Carrera", "Promedio"};
@@ -112,6 +131,7 @@ public class EstudianteView extends JFrame {
         panelSuperior.setLayout(new BoxLayout(panelSuperior, BoxLayout.Y_AXIS));
         panelSuperior.add(panelBusqueda);
         panelSuperior.add(panelFormulario);
+        panelSuperior.add(panelOrden);
         add(panelSuperior, BorderLayout.NORTH);
         add(scroll,        BorderLayout.CENTER);
         add(lblEstado,     BorderLayout.SOUTH);
@@ -131,6 +151,18 @@ public class EstudianteView extends JFrame {
 
         // También buscar al presionar Enter en el campo de texto
         txtNombre.addActionListener((ActionEvent e) -> btnBuscar.doClick());
+        
+            btnMostrarTodos.addActionListener((ActionEvent e) -> {
+            if (controlador != null) {
+             controlador.mostrarTodos();
+            }
+                });
+
+            btnOrdenar.addActionListener((ActionEvent e) -> {
+            if (controlador != null) {
+            controlador.ordenarPor((String) cbCriterioOrden.getSelectedItem());
+            }
+            });
         
         
         btnAgregar.addActionListener((ActionEvent e) -> {
